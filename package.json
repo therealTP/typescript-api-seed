@@ -1,0 +1,39 @@
+{
+  "name": "news-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run build && npm run watch",
+    "build": "rm -rf dist/**/*.js && npm run build-ts",
+    "serve": "node dist/index.js",
+    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"nodemon dist/index.js\"",
+    "test": "jest --forceExit",
+    "build-ts": "tsc",
+    "watch-ts": "tsc -w",
+    "tslint": "tslint -c tslint.json -p tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://therealtp@bitbucket.org/therealtp/news-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/therealtp/news-api#readme",
+  "devDependencies": {
+    "@types/body-parser": "^1.16.3",
+    "@types/dotenv": "^4.0.0",
+    "@types/express": "^4.0.35",
+    "@types/node": "^7.0.22",
+    "concurrently": "^3.4.0",
+    "nodemon": "^1.11.0",
+    "tslint": "^5.3.2",
+    "typescript": "^2.3.3"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.3",
+    "morgan": "^1.8.2"
+  }
+}
