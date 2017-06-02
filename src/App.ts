@@ -2,6 +2,10 @@ import { Application } from 'express';
 import * as bodyParser from 'body-parser';
 import * as logger from 'morgan';
 
+// CONFIGURE APP ENVIRONMENT VARS
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 export class App {
     app: Application;
 

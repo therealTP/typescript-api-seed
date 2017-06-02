@@ -4,10 +4,16 @@ import { NewsSourceRouter } from './routers/NewsSourceRouter';
 export class Api extends App {
     constructor() {
         super();
+        this.setRoutes();
     }
 
     setRoutes() {
+        // NEWS SOURCE ROUTES
         const newsSourceRouter = new NewsSourceRouter();
         this.app.use('/source', newsSourceRouter.router);
+
+        // USER ROUTES
+
+        // SUBSCRIPTION ROUTES
     }
 }
