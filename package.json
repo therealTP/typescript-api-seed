@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build && npm run watch",
-    "build": "rm -rf dist/**/*.js && npm run build-ts",
+    "build": "npm run build-ts",
     "serve": "node dist/index.js",
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"nodemon dist/index.js\"",
     "test": "jest --forceExit",
@@ -24,7 +24,10 @@
     "@types/body-parser": "^1.16.3",
     "@types/dotenv": "^4.0.0",
     "@types/express": "^4.0.35",
+    "@types/lodash": "^4.14.65",
     "@types/node": "^7.0.22",
+    "@types/pg": "^6.1.41",
+    "@types/sequelize": "^4.0.59",
     "concurrently": "^3.4.0",
     "nodemon": "^1.11.0",
     "tslint": "^5.3.2",
@@ -34,6 +37,11 @@
     "body-parser": "^1.17.2",
     "dotenv": "^4.0.0",
     "express": "^4.15.3",
-    "morgan": "^1.8.2"
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "morgan": "^1.8.2",
+    "pg": "^6.2.3",
+    "pogi": "^2.2.3",
+    "sequelize": "^3.30.4"
   }
 }

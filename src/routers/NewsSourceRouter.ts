@@ -1,5 +1,5 @@
 import { AppRouter } from './AppRouter';
-import * as newsSourceCtrl from './../controllers/newsSourceController';
+import { newsSourceController } from './../controllers/newsSourceController';
 
 export class NewsSourceRouter extends AppRouter {
     constructor() {
@@ -7,7 +7,11 @@ export class NewsSourceRouter extends AppRouter {
         this.setRoutes();
     }
 
-    setRoutes() {
-        this.router.get('/', newsSourceCtrl.list);
+    private setRoutes(): void {
+        this.router.get('/', newsSourceController.list);
+        this.router.post('/', newsSourceController.create);
+        this.router.get('/:id', newsSourceController.read);
+        this.router.put('/:id', newsSourceController.update);
+        this.router.delete('/:id', newsSourceController.delete);
     }
 }
