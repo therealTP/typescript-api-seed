@@ -1,14 +1,15 @@
 import { CountryAbbrevType } from './../enums/CountryAbbrevType';
 
 export class NewsSource {
-    public id: string; 
-    public name: string;
-    public websiteUrl: string;
-    public twitterUsername: string;
-    public youtubeUsername: string;
-    public nonProfit: boolean;
-    public sellsAds: boolean;
-    public country: CountryAbbrevType;
+    private id: string; 
+    private name: string;
+    private websiteUrl: string;
+    private twitterUsername: string;
+    private youtubeUsername: string;
+    private nonProfit: boolean;
+    private sellsAds: boolean;
+    private country: CountryAbbrevType;
+    private logoUrl: string;
 
     constructor(id: string, name: string, websiteUrl: string, twitterUsername: string, 
     youtubeUsername: string, nonProfit: boolean, sellsAds: boolean, country: CountryAbbrevType) {

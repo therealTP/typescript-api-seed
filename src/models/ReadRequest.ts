@@ -5,7 +5,7 @@ export class ReadRequest {
         this._id = id;
     }
 
-    public getId() {
+    get id() {
         return this._id;
     }
 }
