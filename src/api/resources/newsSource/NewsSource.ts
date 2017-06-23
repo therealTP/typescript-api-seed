@@ -1,4 +1,4 @@
-import { CountryAbbrevType } from './../enums/CountryAbbrevType';
+import { CountryAbbrevType } from 'enums/CountryAbbrevType';
 
 export class NewsSource {
     private id: string; 

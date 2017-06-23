@@ -1,6 +1,5 @@
-import { NewsSource } from './../../models/NewsSource';
-import { NewsSourceListRequest } from './../../models/NewsSourceListRequest';
-import { ReadRequest } from './../../models/ReadRequest';
+import { NewsSource } from 'api/resources/newsSource/NewsSource';
+import { ListNewsSourceRequest } from 'api/resources/newsSource/ListNewsSourceRequest';
 import { dbConnect } from './../DbConnect';
 import { Dao } from './Dao';
 
@@ -24,7 +23,7 @@ export class NewsSourceDao implements Dao {
         );
     }
 
-    public async find(requestData: NewsSourceListRequest): Promise<NewsSource[]> {
+    public async find(requestData: ListNewsSourceRequest): Promise<NewsSource[]> {
         let rows = await dbConnect.getTable(this.tableName).findAll();
         return rows.map(row => this._createNewsSourceFromRow(row));
     }

@@ -1,5 +1,5 @@
-import { AppRouter } from './AppRouter';
-import { newsSourceController } from './../controllers/newsSourceController';
+import { AppRouter } from 'api/AppRouter';
+import { newsSourceController } from './newsSourceController';
 
 export class NewsSourceRouter extends AppRouter {
     constructor() {
