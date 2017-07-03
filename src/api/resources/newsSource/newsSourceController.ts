@@ -1,20 +1,35 @@
 import { Request, Response } from 'express';
-import { ControllerInterface } from 'api/ControllerInterface';
-import { NewsSource } from 'api/resources/newsSource/NewsSource';
-import { ListNewsSourceRequest } from 'api/resources/newsSource/ListNewsSourceRequest';
-import { ListNewsSourceResponse } from 'api/resources/newsSource/ListNewsSourceResponse';
-import { ReadNewsSourceRequest } from 'api/resources/newsSource/ReadNewsSourceRequest';
-import { ReadNewsSourceResponse } from 'api/resources/newsSource/ReadNewsSourceResponse';
+import { AbstractController, Controller } from './../../AbstractController';
+import { NewsSource } from './NewsSource';
+import { ListNewsSourceRequest } from './ListNewsSourceRequest';
+import { ListNewsSourceResponse } from './ListNewsSourceResponse';
+import { ReadNewsSourceRequest } from './ReadNewsSourceRequest';
+import { ReadNewsSourceResponse } from './ReadNewsSourceResponse';
+import { NewsSourceDao } from './NewsSourceDao';
 
-import { NewsSourceDao } from 'database/daos/NewsSourceDao';
+export class NewsSourceController implements Controller<NewsSourceDao> {
+    this.dao = NewsSourceDao;
 
-export class NewsSourceController implements ControllerInterface {
-    constructor() {}
+    constructor() {
+        // super(new NewsSourceDao());
+        this.dao = new NewsSourceDao();
+    }
 
-    list(req: Request, res: Response): void {
+    // public list = (req: Request, res: Response): void => {
+    //     let requestData = new ListNewsSourceRequest(req.query.search, req.query.limit, req.query.offset);
+    //     this.dao.find(requestData)
+    //     .then(data => {
+    //         let response = new ListNewsSourceResponse(data);
+    //         res.json(response);
+    //     })
+    //     .catch(err => {
+            
+    //     });
+    // }
+
+    public list(req: Request, res: Response): void {
         let requestData = new ListNewsSourceRequest(req.query.search, req.query.limit, req.query.offset);
-        let newsSourceDao = new NewsSourceDao();
-        newsSourceDao.find(requestData)
+        this.dao.find(requestData)
         .then(data => {
             let response = new ListNewsSourceResponse(data);
             res.json(response);
@@ -30,10 +45,8 @@ export class NewsSourceController implements ControllerInterface {
 
     read(req: Request, res: Response): void {
         let requestData = new ReadNewsSourceRequest(req.params.id);
-        let newsSourceDao = new NewsSourceDao();
-        newsSourceDao.findById(requestData.id)
+        this.dao.findById(requestData.id)
         .then(data => {
-            // TODO: implement standardized "ReadResponse" class
             let response = new ReadNewsSourceResponse(data);
             res.json(response);
         })
@@ -50,5 +63,3 @@ export class NewsSourceController implements ControllerInterface {
 
     }
 }
-
-export let newsSourceController = new NewsSourceController();

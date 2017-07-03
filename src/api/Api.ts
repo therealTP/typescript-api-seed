@@ -1,5 +1,5 @@
 import { App } from './../App';
-import { NewsSourceRouter } from 'api/resources/newsSource/NewsSourceRouter';
+import { NewsSourceRouter } from './resources/newsSource/NewsSourceRouter';
 
 export class Api extends App {
     constructor() {

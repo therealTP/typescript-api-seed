@@ -1,4 +1,4 @@
-import { UpdateRequest } from 'api/request/UpdateRequest';
+import { UpdateRequest } from './../../request/UpdateRequest';
 import { UpdateNewsSourceDataInterface } from './UpdateNewsSourceDataInterface';
 
 export class UpdateNewsSourceRequest<UpdateNewsSourceDataInterface> extends UpdateRequest<UpdateNewsSourceDataInterface> {

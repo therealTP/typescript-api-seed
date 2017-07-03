@@ -1,4 +1,4 @@
-import { Error } from 'api/errors/Error';
+import { Error } from './../errors/Error';
 
 export interface ResponseInterface {
     success: boolean;

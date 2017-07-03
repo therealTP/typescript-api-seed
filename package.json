@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build && npm run watch",
-    "build": "npm run build-ts",
+    "build": "rm -rf dist/* && npm run build-ts",
     "serve": "node dist/index.js",
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"nodemon dist/index.js\"",
     "test": "jest --forceExit",

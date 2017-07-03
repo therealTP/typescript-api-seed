@@ -1,4 +1,4 @@
-import { ListRequest } from 'api/request/ListRequest';
+import { ListRequest } from '../../request/ListRequest';
 
 export class ListNewsSourceRequest extends ListRequest {
     constructor(searchTerm: string, limit: number, offset: number) {

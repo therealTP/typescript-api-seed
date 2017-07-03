@@ -1,4 +1,4 @@
-import { ResponseInterface } from 'api/response/ResponseInterface';
+import { ResponseInterface } from './../response/ResponseInterface';
 import { Error } from './Error';
 
 export class ErrorResponse implements ResponseInterface {

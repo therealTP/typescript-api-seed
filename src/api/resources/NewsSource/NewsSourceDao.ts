@@ -1,7 +1,11 @@
-import { NewsSource } from 'api/resources/newsSource/NewsSource';
-import { ListNewsSourceRequest } from 'api/resources/newsSource/ListNewsSourceRequest';
-import { dbConnect } from './../DbConnect';
-import { Dao } from './Dao';
+/**
+ * Import database connection object (pool/singleton)
+ */
+import { dbConnect } from './../../../database/DbConnect';
+
+import { NewsSource } from './NewsSource';
+import { ListNewsSourceRequest } from './ListNewsSourceRequest';
+import { Dao } from './../../../database/Dao';
 
 export class NewsSourceDao implements Dao {
     tableName: string;

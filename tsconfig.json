@@ -1,28 +1,9 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "outDir": "dist",
     "target": "es6",
     "module": "commonjs",
-    "removeComments": true,
-    "paths": {
-      "api/*": [
-        "*",
-        "src/api/*",
-        "dist/api/*"
-      ],
-      "resources*/": [
-        "*",
-        "src/api/resources/*",
-        "dist/api/resources/*"
-      ],
-      "database/*": [
-        "src/database/*"
-      ],
-      "enums/*": [
-        "src/enums/*"
-      ]
-    }
+    "removeComments": true
   },
   "include": [
     "src/**/*.ts"

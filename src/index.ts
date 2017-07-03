@@ -3,8 +3,8 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 // Import modules
-import { Api } from 'api/Api';
-import { dbConnect } from 'database/DbConnect';
+import { Api } from './api/Api';
+import { dbConnect } from './database/DbConnect';
 
 // Create api
 const newsApi = new Api();
