@@ -1,16 +1,15 @@
 import { Router } from 'express';
-import { Controller } from './AbstractController';
+import { Controller } from './ControllerInterface';
 
-export abstract class AbstractRouter<ControllerType> {
+export abstract class AbstractRouter<ControllerType extends Controller> {
     public router: Router;
     protected controller: ControllerType;
 
-    constructor(controller: ControllerType implements Controller) {
+    constructor(controller: ControllerType) {
         this.router = Router();
         this.controller = controller;
+        this.setRoutes();
     }
-
-    // abstract setRoutes(): void;
 
     setRoutes(): void {
         this.router.get('/', this.controller.list);
