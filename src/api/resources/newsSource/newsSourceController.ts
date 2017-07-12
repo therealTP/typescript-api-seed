@@ -7,7 +7,7 @@ import { ReadNewsSourceRequest } from './ReadNewsSourceRequest';
 import { ReadNewsSourceResponse } from './ReadNewsSourceResponse';
 import { NewsSourceDao } from './NewsSourceDao';
 
-export class NewsSourceController implements Controller{
+export class NewsSourceController implements Controller {
     dao: NewsSourceDao;
 
     constructor() {
