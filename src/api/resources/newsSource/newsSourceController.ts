@@ -11,7 +11,6 @@ export class NewsSourceController implements Controller {
     dao: NewsSourceDao;
 
     constructor() {
-        // new NewsSourceDao());
         this.dao = new NewsSourceDao();
     }
 
@@ -26,18 +25,6 @@ export class NewsSourceController implements Controller {
             
         });
     }
-
-    // public list(req: Request, res: Response): void {
-    //     let requestData = new ListNewsSourceRequest(req.query.search, req.query.limit, req.query.offset);
-    //     this.dao.find(requestData)
-    //     .then(data => {
-    //         let response = new ListNewsSourceResponse(data);
-    //         res.json(response);
-    //     })
-    //     .catch(err => {
-            
-    //     });
-    // }
 
     create(req: Request, res: Response): void {
 
