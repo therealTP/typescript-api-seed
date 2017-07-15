@@ -4,12 +4,14 @@
 import { dbConnect } from './../../../database/DbConnect';
 
 import { NewsSource } from './NewsSource';
+import { CreateNewsSourceRequest } from './CreateNewsSourceRequest';
+import { ReadNewsSourceRequest } from './ReadNewsSourceRequest';
 import { ListNewsSourceRequest } from './ListNewsSourceRequest';
 import { Dao } from './../../../database/Dao';
 
-export class NewsSourceDao extends Dao<NewsSource, ListNewsSourceRequest> {
+export class NewsSourceDao extends Dao<NewsSource, ListNewsSourceRequest, CreateNewsSourceRequest, UpdateNewsSourceRequest> {
     constructor() {
-        super('news_sources');
+        super('news_sources', 'create');
     }
 
     _createResourceInstanceFromRow(row: any) {
@@ -24,26 +26,4 @@ export class NewsSourceDao extends Dao<NewsSource, ListNewsSourceRequest> {
             row.country
         );
     }
-
-    // public async find(requestData: ListNewsSourceRequest): Promise<NewsSource[]> {
-    //     let rows = await dbConnect.getTable(this.tableName).findAll();
-    //     return rows.map(row => this._createNewsSourceFromRow(row));
-    // }
-
-    // public async findById(id: string): Promise<NewsSource> {
-    //     let row = await dbConnect.getTable(this.tableName).findOne({id});
-    //     return this._createNewsSourceFromRow(row);
-    // }
-
-    // public create(newsSource: NewsSource): Promise<NewsSource> {
-    //     return await
-    // }
-
-    // public update(newsSourceId: string, updateData: NewsSourceUpdateRequest): Promise<any> {
-    //     return await 
-    // }
-
-    // public delete(newsSourceId: string): Promise<any> {
-    //     return await 
-    // }
 }
