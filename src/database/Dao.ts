@@ -1,32 +1,29 @@
-// export interface Dao {
-//     tableName: string,
-//     find(requestData: any): Promise<any>;
-//     findById(id: string): Promise<any>;
-//     // create(insertData: any): Promise<any>;
-//     // update(id: string, updateData: any): Promise<any>;
-//     // delete(id: string): Promise<any>;
-// }
 import { dbConnect } from './DbConnect';
 
 export abstract class Dao<ResourceType, ListRequestType, CreateRequestType, UpdateRequestType> {
     tableName: string;
-    orderResultsBy: string;
+    orderListResultsBy: string;
 
-    constructor(tableName: string, orderResultsBy: string) {
+    constructor(tableName: string, orderListResultsBy: string) {
         this.tableName = tableName;
-        this.orderResultsBy = orderResultsBy;
+        this.orderListResultsBy = orderListResultsBy;
     }
 
-    // Implemeneted in derived classes:
+    // Implemented in derived classes:
     // Map request data fcns:
+    abstract _mapListRequestData(createRequestData: ListRequestType): any;
     abstract _mapCreateRequestData(createRequestData: CreateRequestType): any;
     abstract _mapUpdateRequestData(updateRequestData: UpdateRequestType): any;
 
     // Map response data fcns:
     abstract _createResourceInstanceFromRow(row: any): ResourceType;
 
-    public async find(requestData: ListRequestType): Promise<ResourceType[]> {
+    public async find(listRequest: ListRequestType): Promise<ResourceType[]> {
+        // let listData = this._mapListRequestData(listRequest);
+        console.log("FIND HIT!");
+        const listData = {limit: 5};
         let rows = await dbConnect.getTable(this.tableName).findAll();
+        console.log("ROWS", rows);
         return rows.map(row => this._createResourceInstanceFromRow(row));
     }
     
@@ -41,14 +38,14 @@ export abstract class Dao<ResourceType, ListRequestType, CreateRequestType, Upda
         return this._createResourceInstanceFromRow(created);
     }
 
-    public async update(id: string, updateRequest: UpdateRequestType): Promise<ResourceType> {
-        let updateData = this._mapUpdateRequestData(updateRequest);
-        let updated = await dbConnect.getTable(this.tableName).updateAndGetOne({id}, updateData);
-        return this._createResourceInstanceFromRow(updated);
-    }
+    // public async update(id: string, updateRequest: UpdateRequestType): Promise<ResourceType> {
+    //     let updateData = this._mapUpdateRequestData(updateRequest);
+    //     let updated = await dbConnect.getTable(this.tableName).updateAndGetOne({id}, updateData);
+    //     return this._createResourceInstanceFromRow(updated);
+    // }
 
     public async delete(id: string): Promise<{}> {
-        let row = await dbConnect.getTable(this.tableName).delete({id});
+        let deleted = await dbConnect.getTable(this.tableName).delete({id});
         return {}; 
     }
 }
