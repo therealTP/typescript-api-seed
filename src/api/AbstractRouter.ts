@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Controller } from './ControllerInterface';
+import { Controller, AbstractController } from './ControllerInterface';
 
 export abstract class AbstractRouter<ControllerType extends Controller> {
     public router: Router;

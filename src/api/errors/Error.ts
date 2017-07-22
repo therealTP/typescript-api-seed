@@ -1,9 +1,9 @@
 export class Error {
-    code: string;
     message: string;
+    code: string;
 
-    constructor(code: string, message: string) {
-        this.code = code;
+    constructor(message: string, code: string) {
         this.message = message;
+        this.code = code;
     }
 }

@@ -1,70 +1,64 @@
+import { AbstractResource } from './../../AbstractResource';
 import { CountryAbbrevType } from '../../../enums/CountryAbbrevType';
-import { v4 as uuid } from 'uuid';
 
-export class NewsSource {
-    // private _id: string; 
-    // private _name: string;
-    // private _websiteUrl: string;
-    // private _twitterUsername: string;
-    // private _youtubeUsername: string;
-    // private _nonProfit: boolean;
-    // private _sellsAds: boolean;
-    // private _country: CountryAbbrevType;
-    // private _logoUrl: string;
-    // private _slug: string;
+export class NewsSource extends AbstractResource {
+/*    private name: string;
+    private websiteUrl: string;
+    private slug: string;
+    private logoUrl: string;
+    private twitterUsername: string;
+    private youtubeUsername: string;
+    private nonProfit: boolean;
+    private sellsAds: boolean;
+    private country: CountryAbbrevType;*/
 
-    id: string; 
-    name: string;
-    websiteUrl: string;
-    twitterUsername: string;
-    youtubeUsername: string;
-    nonProfit: boolean;
-    sellsAds: boolean;
-    country: CountryAbbrevType;
-    logoUrl: string;
-    slug: string;
+    public name: string;
+    public websiteUrl: string;
+    public slug: string;
+    public logoUrl: string;
+    public twitterUsername: string;
+    public youtubeUsername: string;
+    public nonProfit: boolean;
+    public sellsAds: boolean;
+    public country: CountryAbbrevType;
 
-    // public setId(id: string) {
-    //     this.id = id;
-    // }
-
-/*    set id(id: string) {
-        this._id = id;
+    constructor() {
+        super();
     }
 
-    set name(name: string) {
-        this._name = name;
+/*    public setName(name: string) {
+        this.name = name;
     }
 
-    set websiteUrl(websiteUrl: string) {
-        this._websiteUrl = websiteUrl;
+    public setWebsiteUrl(websiteUrl: string) {
+        this.websiteUrl = websiteUrl;
     }
 
-    set twitterUsername(twitterUsername: string) {
-        this._twitterUsername = twitterUsername;
+    public setSlug(slug: string) {
+        this.slug = slug;
     }
 
-    set youtubeUsername(youtubeUsername: string) {
-        this._youtubeUsername = youtubeUsername;
+    public setLogoUrl(logoUrl: string) {
+        this.logoUrl = logoUrl;
     }
 
-    set nonProfit(nonProfit: boolean) {
-        this._nonProfit = nonProfit;
+    public setTwitterUsername(twitterUsername: string) {
+        this.twitterUsername = twitterUsername;
     }
 
-    set sellsAds(sellsAds: boolean) {
-        this._sellsAds = sellsAds;
+    public setYoutubeUsername(youtubeUsername: string) {
+        this.youtubeUsername = youtubeUsername;
     }
 
-    set country(country: CountryAbbrevType) {
-        this._country = country;
+    public setNonProfit(nonProfit: boolean) {
+        this.nonProfit = nonProfit;
     }
 
-    set logoUrl(logoUrl: string) {
-        this._logoUrl = logoUrl;
+    public setSellsAds(sellsAds: boolean) {
+        this.sellsAds = sellsAds;
     }
 
-    set slug(slug: string) {
-        this._slug = slug;
+    public setCountry(country: CountryAbbrevType) {
+        this.country = country;
     }*/
 }

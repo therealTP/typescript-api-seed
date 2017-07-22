@@ -7,6 +7,8 @@ import { ListNewsSourceResponse } from './ListNewsSourceResponse';
 import { ReadNewsSourceRequest } from './ReadNewsSourceRequest';
 import { ReadNewsSourceResponse } from './ReadNewsSourceResponse';
 import { NewsSourceDao } from './NewsSourceDao';
+import { Error } from './../../errors/Error';
+import { ErrorResponse } from './../../errors/ErrorResponse';
 
 export class NewsSourceController implements Controller {
     dao: NewsSourceDao;
@@ -17,7 +19,6 @@ export class NewsSourceController implements Controller {
 
     public list = (req: Request, res: Response): void => {
         let requestData = new ListNewsSourceRequest(req.query.search, req.query.limit, req.query.offset);
-        console.log("CTRL HIT", requestData);
         // let requestData = {limit: 5};
         this.dao.find(requestData)
         .then(data => {
@@ -25,50 +26,55 @@ export class NewsSourceController implements Controller {
             res.json(response);
         })
         .catch(err => {
-            
+            const error = new Error(err.error, 'err.dao_list');
+            const errorResponse = new ErrorResponse(error);
+            res.status(500).json(errorResponse);
         });
     }
 
-    create(req: Request, res: Response): void {
+    public create = (req: Request, res: Response): void => {
         // By the time req data gets to this point, it's been validated
-        const requestBody: NewsSource = req.body;
+        const payload = req.body;
 
         // METHOD #1: pass request body into constructor & map
-        try {
-            const createRequest = new CreateNewsSourceRequest(requestBody);
-            console.log("CREATE REQ", createRequest);
-        } catch(e) {
-            console.log("CREATE ERR", e);
-        }
+        const createRequest = new CreateNewsSourceRequest();
+        // METHOD #1: named get/set methods
+/*            createRequest.setName(payload.name);
+        createRequest.setWebsiteUrl(payload.websiteUrl);
+        createRequest.setSlug(payload.slug);
+        createRequest.setLogoUrl(payload.logoUrl);
+        createRequest.setTwitterUsername(payload.twitterUsername);
+        createRequest.setYoutubeUsername(payload.youtubeUsername);
+        createRequest.setNonProfit(payload.nonProfit);
+        createRequest.setSellsAds(payload.sellsAds);
+        createRequest.setCountry(payload.country);*/
 
-        res.send({});
+        // METHOD #2: public props. FINE FOR NOW
+        createRequest.generateUUID();
+        createRequest.name = payload.name;
+        createRequest.websiteUrl = payload.websiteUrl;
+        createRequest.slug = payload.slug;
+        createRequest.logoUrl = payload.logoUrl;
+        createRequest.twitterUsername = payload.twitterUsername;
+        createRequest.youtubeUsername = payload.youtubeUsername;
+        createRequest.nonProfit = payload.nonProfit;
+        createRequest.sellsAds = payload.sellsAds;
+        createRequest.country = payload.country;
 
+        console.log("CREATE REQ", createRequest);
 
-        // METHOD #2: atypical setter method, like Java
-        // createRequest.setName(body.name);
-
-        // METHOD #3: TS-recommended setter method (w/ diff private prop name)
-        // createRequest.websiteUrl = body.websiteUrl;
-
-        // METHOD #4: make props public, assign in that way (seems to be same as TS setter)
-        // createRequest.twitterUsername = body.twitterUsername;
-        // createRequest.youtubeUsername = body.youtubeUsername;
-        // createRequest.nonProfit = body.nonProfit;
-        // createRequest.sellsAds = body.sellsAds;
-        // createRequest.country = body.country;
-        // createRequest.logoUrl = body.logoUrl;
-        // createRequest.slug = body.slug;
-
-        // this.dao.create(createRequest)
-        // .then(data => {
-
-        // })
-        // .catch(err => {
-        //     console.log("POST ERR", err);
-        //     res.status(500).json({});
-        // });
-
-
+        // res.send({});
+        this.dao.create(createRequest)
+        .then(data => {
+            console.log("SUCCESS!", data);
+            res.json(data);
+        })
+        .catch(err => {
+            console.log("ERR TYPE", err.code, err.message);
+            const error = new Error(err.message, 'err.dao_create');
+            const errorResponse = new ErrorResponse(error);
+            res.status(500).json(errorResponse);
+        });
     }
 
     read(req: Request, res: Response): void {

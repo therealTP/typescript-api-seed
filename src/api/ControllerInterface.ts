@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
 export abstract class AbstractController<DaoType> {
-    dao: DaoType;
+    private dao: DaoType;
 
     constructor(dao: DaoType) {
         this.dao = dao;
