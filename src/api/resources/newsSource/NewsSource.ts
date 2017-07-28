@@ -21,6 +21,7 @@ export class NewsSource extends AbstractResource {
     public nonProfit: boolean;
     public sellsAds: boolean;
     public country: CountryAbbrevType;
+    public created: Date;
 
     constructor() {
         super();

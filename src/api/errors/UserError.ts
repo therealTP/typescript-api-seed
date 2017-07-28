@@ -1,4 +1,4 @@
-export class Error {
+export class UserError {
     message: string;
     code: string;
 

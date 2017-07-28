@@ -1,7 +1,7 @@
 import { dbConnect } from './DbConnect';
 import { camelizeKeys, decamelizeKeys } from 'humps';
 
-export abstract class Dao<ResourceType, ListRequestType, CreateRequestType, UpdateRequestType> {
+export abstract class Dao<ResourceType, ListRequestType, CreateRequestType, ReadRequestType, UpdateRequestDataType> {
     tableName: string;
 
     constructor(tableName: string) {
@@ -13,23 +13,6 @@ export abstract class Dao<ResourceType, ListRequestType, CreateRequestType, Upda
     * Generates a single instance of the ResourceType
     */
     abstract getResourceInstance(): ResourceType;
-
-    /*
-    REQUEST MAP FUNCTIONS
-    Used to map request class props to db column names
-    TODO: do I need these?! can use humps methods
-    */
-    private mapListRequestData(request: ListRequestType): any {
-        
-    }
-    
-    private mapCreateRequestData(request: CreateRequestType): any {
-        return decamelizeKeys(request);
-    }
-
-    private mapUpdateRequestData(request: UpdateRequestType): any {
-        return decamelizeKeys(request);
-    }
 
    /*
     RESPONSE MAP FUNCTIONS
@@ -54,30 +37,30 @@ export abstract class Dao<ResourceType, ListRequestType, CreateRequestType, Upda
     */
     public async find(listRequest: ListRequestType): Promise<ResourceType[]> {
         // let listData = this.mapListRequestData(listRequest);
-        const listData = {limit: 5};
-        let rows = await dbConnect.getTable(this.tableName).findAll();
+        // const listData = {limit: 5};
+        // {'name like': 'A%'}
+        let rows = await dbConnect.getTable(this.tableName).find({'or': [{'name like': '%%'}, {'slug like': '%%'}]});
         return rows.map(row => this.createResourceInstanceFromRow(row));
     }
     
-    public async findById(id: string): Promise<ResourceType> {
-        let row = await dbConnect.getTable(this.tableName).findOne({id});
+    public async findOne(readRequest: ReadRequestType): Promise<ResourceType> {
+        let row = await dbConnect.getTable(this.tableName).findOne(readRequest);
         return this.createResourceInstanceFromRow(row);
     }
 
     public async create(createRequest: CreateRequestType): Promise<ResourceType> {
         let createData = decamelizeKeys(createRequest);
-        console.log("CREATE DATA", createData);
-        let created = await dbConnect.getTable(this.tableName).insertAndGet(createData, {return: ['id']});
-
+        let created = await dbConnect.getTable(this.tableName).insertAndGet(createData);
         return this.createResourceInstanceFromRow(created);
     }
 
-    public async update(id: string, updateRequest: UpdateRequestType): Promise<ResourceType> {
-        let updateData = decamelizeKeys(updateRequest);
+    public async update(id: string, updates: UpdateRequestDataType): Promise<ResourceType> {
+        let updateData = decamelizeKeys(updates);
         let updated = await dbConnect.getTable(this.tableName).updateAndGetOne({id}, updateData);
         return this.createResourceInstanceFromRow(updated);
     }
 
+    // Would only delete by id, so this method accepts string id
     public async delete(id: string): Promise<{}> {
         let deleted = await dbConnect.getTable(this.tableName).delete({id});
         return {}; 

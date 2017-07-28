@@ -1,5 +1,8 @@
 import { SuccessResponse } from './SuccessResponse';
 
-export class DeleteSuccessResponse<T> extends SuccessResponse<T> {
-    // NEWLY UPDATED OBJECT OR EMPTY OBJECT AS SUCCESS? 
+export class DeleteSuccessResponse extends SuccessResponse<{}> {
+    // NEWLY UPDATED OBJECT OR EMPTY OBJECT AS SUCCESS?
+    constructor() {
+        super({});
+    } 
 }

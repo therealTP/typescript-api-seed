@@ -2,13 +2,17 @@ import { Request, Response } from 'express';
 import { Controller } from './../../ControllerInterface';
 import { NewsSource } from './NewsSource';
 import { CreateNewsSourceRequest } from './CreateNewsSourceRequest';
+import { CreateNewsSourceResponse } from './CreateNewsSourceResponse';
 import { ListNewsSourceRequest } from './ListNewsSourceRequest';
 import { ListNewsSourceResponse } from './ListNewsSourceResponse';
 import { ReadNewsSourceRequest } from './ReadNewsSourceRequest';
 import { ReadNewsSourceResponse } from './ReadNewsSourceResponse';
+import { UpdateNewsSourceRequest } from './UpdateNewsSourceRequest';
+import { DeleteNewsSourceRequest } from './DeleteNewsSourceRequest';
+import { DeleteNewsSourceResponse } from './DeleteNewsSourceResponse';
 import { NewsSourceDao } from './NewsSourceDao';
-import { Error } from './../../errors/Error';
-import { ErrorResponse } from './../../errors/ErrorResponse';
+
+import { handleDbErrorResponse } from './../../errors/ErrorUtils';
 
 export class NewsSourceController implements Controller {
     dao: NewsSourceDao;
@@ -18,39 +22,25 @@ export class NewsSourceController implements Controller {
     }
 
     public list = (req: Request, res: Response): void => {
-        let requestData = new ListNewsSourceRequest(req.query.search, req.query.limit, req.query.offset);
-        // let requestData = {limit: 5};
-        this.dao.find(requestData)
+        let listRequest = new ListNewsSourceRequest(req.query.search, req.query.limit, req.query.offset);
+        this.dao.find(listRequest)
         .then(data => {
-            let response = new ListNewsSourceResponse(data);
-            res.json(response);
+            let listResponse = new ListNewsSourceResponse(data);
+            res.json(listResponse);
         })
         .catch(err => {
-            const error = new Error(err.error, 'err.dao_list');
-            const errorResponse = new ErrorResponse(error);
-            res.status(500).json(errorResponse);
+            handleDbErrorResponse(err, 'err.dao_list', res);
         });
     }
 
     public create = (req: Request, res: Response): void => {
         // By the time req data gets to this point, it's been validated
         const payload = req.body;
-
-        // METHOD #1: pass request body into constructor & map
         const createRequest = new CreateNewsSourceRequest();
-        // METHOD #1: named get/set methods
-/*            createRequest.setName(payload.name);
-        createRequest.setWebsiteUrl(payload.websiteUrl);
-        createRequest.setSlug(payload.slug);
-        createRequest.setLogoUrl(payload.logoUrl);
-        createRequest.setTwitterUsername(payload.twitterUsername);
-        createRequest.setYoutubeUsername(payload.youtubeUsername);
-        createRequest.setNonProfit(payload.nonProfit);
-        createRequest.setSellsAds(payload.sellsAds);
-        createRequest.setCountry(payload.country);*/
 
-        // METHOD #2: public props. FINE FOR NOW
+        // Generate UUID here (not in class constructor)
         createRequest.generateUUID();
+        // Assign to public props: fine for now!
         createRequest.name = payload.name;
         createRequest.websiteUrl = payload.websiteUrl;
         createRequest.slug = payload.slug;
@@ -61,39 +51,49 @@ export class NewsSourceController implements Controller {
         createRequest.sellsAds = payload.sellsAds;
         createRequest.country = payload.country;
 
-        console.log("CREATE REQ", createRequest);
-
-        // res.send({});
         this.dao.create(createRequest)
         .then(data => {
-            console.log("SUCCESS!", data);
-            res.json(data);
+            const createResponse = new CreateNewsSourceResponse(data);
+            res.json(createResponse);
         })
         .catch(err => {
-            console.log("ERR TYPE", err.code, err.message);
-            const error = new Error(err.message, 'err.dao_create');
-            const errorResponse = new ErrorResponse(error);
-            res.status(500).json(errorResponse);
+            handleDbErrorResponse(err, 'err.dao_create', res);
         });
     }
 
-    read(req: Request, res: Response): void {
-        let requestData = new ReadNewsSourceRequest(req.params.id);
-        this.dao.findById(requestData.id)
+    public read = (req: Request, res: Response): void => {
+        let readRequest = new ReadNewsSourceRequest(req.params.id);
+        this.dao.findOne(readRequest)
         .then(data => {
             let response = new ReadNewsSourceResponse(data);
             res.json(response);
         })
         .catch(err => {
-            
+            handleDbErrorResponse(err, 'err.dao_read', res);
         });
     }
 
-    update(req: Request, res: Response): void {
-
+    public update = (req: Request, res: Response): void => {
+        let updateRequest = new UpdateNewsSourceRequest(req.params.id, req.body);
+        this.dao.update(updateRequest.id, updateRequest.body)
+        .then(data => {
+            let updateResponse = new ReadNewsSourceResponse(data);
+            res.json(updateResponse);
+        })
+        .catch(err => {
+            handleDbErrorResponse(err, 'err.dao_update', res);
+        });
     }
 
-    delete(req: Request, res: Response): void {
-
+    public delete = (req: Request, res: Response): void => {
+        let deleteRequest = new DeleteNewsSourceRequest(req.params.id);
+        this.dao.delete(deleteRequest.id)
+        .then(data => {
+            let deleteResponse = new DeleteNewsSourceResponse();
+            res.json(deleteResponse);
+        })
+        .catch(err => {
+            handleDbErrorResponse(err, 'err.dao_delete', res);
+        });
     }
 }

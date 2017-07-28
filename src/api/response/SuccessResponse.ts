@@ -5,8 +5,9 @@ export class SuccessResponse<T> implements ResponseInterface {
     error: null;
     response: T | T[];
 
-    constructor() {
+    constructor(response: T | T[]) {
         this.success = true;
         this.error = null;
+        this.response = response;
     }
 }
