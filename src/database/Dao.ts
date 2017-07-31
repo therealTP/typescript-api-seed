@@ -3,9 +3,11 @@ import { camelizeKeys, decamelizeKeys } from 'humps';
 
 export abstract class Dao<ResourceType, ListRequestType, CreateRequestType, ReadRequestType, UpdateRequestDataType> {
     tableName: string;
+    searchFields: string[];
 
-    constructor(tableName: string) {
+    constructor(tableName: string, searchFields: string[]) {
         this.tableName = tableName;
+        this.searchFields = searchFields;
     }
 
    /**
@@ -31,16 +33,42 @@ export abstract class Dao<ResourceType, ListRequestType, CreateRequestType, Read
         return resourceInstance;
     }
 
+    private generateSearchMap(searchTerm: string): any {
+        const searchMap = {
+            or: []
+        };
+
+        this.searchFields.forEach(field => {
+            const fieldMap = {
+                // ILIKE = case insensitive
+                [`${field} ilike`]: `%${searchTerm}%`
+            };
+
+            searchMap.or.push(fieldMap);
+        });
+
+        return searchMap;
+    }
+
     /*
     BASIC CRUD FUNCTIONS
     More specific DAO methods defined/implemented in derived classes
     */
-    public async find(listRequest: ListRequestType): Promise<ResourceType[]> {
+    public async find(listRequest: ListRequestType, searchTerm: string): Promise<ResourceType[]> {
         // let listData = this.mapListRequestData(listRequest);
         // const listData = {limit: 5};
-        // {'name like': 'A%'}
-        let rows = await dbConnect.getTable(this.tableName).find({'or': [{'name like': '%%'}, {'slug like': '%%'}]});
+        let rows;
+
+        if (this.searchFields.length && searchTerm) {
+            let searchMap = this.generateSearchMap(searchTerm);
+            rows = await dbConnect.getTable(this.tableName).find(searchMap, listRequest);
+        } else {
+            rows = await dbConnect.getTable(this.tableName).findAll(listRequest);
+        }
+
         return rows.map(row => this.createResourceInstanceFromRow(row));
+        
+        
     }
     
     public async findOne(readRequest: ReadRequestType): Promise<ResourceType> {

@@ -22,8 +22,9 @@ export class NewsSourceController implements Controller {
     }
 
     public list = (req: Request, res: Response): void => {
-        let listRequest = new ListNewsSourceRequest(req.query.search, req.query.limit, req.query.offset);
-        this.dao.find(listRequest)
+        let listRequest = new ListNewsSourceRequest(req.query.limit, req.query.offset);
+        let searchTerm: string = req.query.search;
+        this.dao.find(listRequest, searchTerm)
         .then(data => {
             let listResponse = new ListNewsSourceResponse(data);
             res.json(listResponse);

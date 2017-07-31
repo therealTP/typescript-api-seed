@@ -11,7 +11,11 @@ import { DeleteNewsSourceRequest } from './DeleteNewsSourceRequest';
 
 export class NewsSourceDao extends Dao<NewsSource, ListNewsSourceRequest, CreateNewsSourceRequest, ReadNewsSourceRequest, UpdateNewsSourceDataInterface> {
     constructor() {
-        super('news_sources');
+        super(
+            'news_sources', 
+            ['name', 'website_url'],
+            ['non_profit', 'sells_ads', 'country']
+        );
     }
 
     getResourceInstance() {
