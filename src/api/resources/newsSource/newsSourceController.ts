@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import * as lo from 'lodash';
+
 import { Controller } from './../../ControllerInterface';
 import { NewsSource } from './NewsSource';
 import { CreateNewsSourceRequest } from './CreateNewsSourceRequest';
@@ -22,9 +24,13 @@ export class NewsSourceController implements Controller {
     }
 
     public list = (req: Request, res: Response): void => {
-        let listRequest = new ListNewsSourceRequest(req.query.limit, req.query.offset);
-        let searchTerm: string = req.query.search;
-        this.dao.find(listRequest, searchTerm)
+        let listRequest = new ListNewsSourceRequest(req.query.limit, req.query.offset, req.query.sort);
+        let searchTerm: string = req.query.q;
+
+        // Filter params: not search term or query options
+        let filterParams = lo.omit(req.query, ['limit', 'offset', 'search', 'order_by']);
+        
+        this.dao.findMany(listRequest, searchTerm, filterParams)
         .then(data => {
             let listResponse = new ListNewsSourceResponse(data);
             res.json(listResponse);

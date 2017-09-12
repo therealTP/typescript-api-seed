@@ -1,4 +1,4 @@
-import { PgDb, PgSchema, PgTable } from 'pogi';
+import { PgDb, PgSchema, PgTable, QueryOptions } from 'pogi';
 
 let dbConfig = {
     host: process.env.DB_URL,
@@ -35,6 +35,10 @@ class DbConnect {
         } else {
             return null;
         }
+    }
+
+    public query(queryString: string, params: QueryOptions) {
+        return this.pgdb.query(queryString, params);
     }
 }
 

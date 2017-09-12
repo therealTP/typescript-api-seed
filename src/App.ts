@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as logger from 'morgan';
+import * as boolParser from 'express-query-boolean';
 
 export class App {
     public app: express.Application;
