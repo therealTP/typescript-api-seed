@@ -1,1 +1,2 @@
-# My project's README
+# typescript-api-seed
+Typescript + Node.js + Express + Pogi (Postgres)
