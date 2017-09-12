@@ -2,7 +2,7 @@ import { QueryOptions } from 'pogi';
 import { camelizeKeys, decamelizeKeys } from 'humps';
 import * as lo from 'lodash';
 
-import { dbConnect } from './DbConnect';
+import { db } from './db';
 import { DaoConfigInterface } from './DaoConfigInterface';
 import { ListRequest } from './../api/request/ListRequest';
 import { SearchMap, FilterMap, FindMap } from './daoMaps';
@@ -147,46 +147,51 @@ export abstract class Dao<ResourceType, ListRequestType extends ListRequest, Cre
     More specific DAO methods defined/implemented in derived classes
     */
     public async findMany(queryOptions: ListRequestType, searchTerm: string, filterFields: {}): Promise<ResourceType[]> {
+        // options for query:
         let queryMap = this.generateQueryMap(queryOptions);
+        
         let searchMap = this.generateSearchMap(searchTerm);
         let filterMap = this.generateFilterMap(filterFields);
         let findMap = this.generateFindMap(searchMap, filterMap);
         
         let rows;
+        // if a custom query exists in DAO config:
         if (this.findManyCustomQuery) {
-            rows = await dbConnect.query(this.findOneCustomQuery, queryMap);
+            // run the custom query w/ find map as params:
+            rows = await db.query(this.findManyCustomQuery, findMap, queryMap);
         } else {
-            rows = await dbConnect.getTable(this.tableName).find(findMap, queryMap);
+            rows = await db.getTable(this.tableName).find(findMap, queryMap);
         }
-        // rows = await dbConnect.getTable(this.tableName).find(findMap, queryMap);
         return rows.map(row => this.createResourceInstanceFromRow(row));
     }
     
     public async findOne(readRequest: ReadRequestType): Promise<ResourceType> {
         let row;
+        // if a custom query exists in DAO config:
         if (this.findOneCustomQuery) {
-            row = await dbConnect.getTable(this.tableName).query(this.findOneCustomQuery, readRequest);
+            // run the custom query w/ readRequest as params:
+            row = await db.query(this.findOneCustomQuery, readRequest);
         } else {
-            row = await dbConnect.getTable(this.tableName).findOne(readRequest);
+            row = await db.getTable(this.tableName).findOne(readRequest);
         }
         return this.createResourceInstanceFromRow(row);
     }
 
     public async create(createRequest: CreateRequestType): Promise<ResourceType> {
         let createData = decamelizeKeys(createRequest);
-        let created = await dbConnect.getTable(this.tableName).insertAndGet(createData);
+        let created = await db.getTable(this.tableName).insertAndGet(createData);
         return this.createResourceInstanceFromRow(created);
     }
 
     public async update(id: string, updates: UpdateRequestDataType): Promise<ResourceType> {
         let updateData = decamelizeKeys(updates);
-        let updated = await dbConnect.getTable(this.tableName).updateAndGetOne({id}, updateData);
+        let updated = await db.getTable(this.tableName).updateAndGetOne({id}, updateData);
         return this.createResourceInstanceFromRow(updated);
     }
 
     // Would only delete by id, so this method accepts string id
     public async delete(id: string): Promise<{}> {
-        let deleted = await dbConnect.getTable(this.tableName).delete({id});
+        let deleted = await db.getTable(this.tableName).delete({id});
         return {}; 
     }
 }

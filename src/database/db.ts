@@ -11,7 +11,7 @@ let dbConfig = {
     poolSize: 10
 };
 
-class DbConnect {
+class Db {
     pgdb: PgDb;
     connected: boolean;
 
@@ -37,10 +37,10 @@ class DbConnect {
         }
     }
 
-    public query(queryString: string, params: QueryOptions) {
-        return this.pgdb.query(queryString, params);
+    public query(queryString: string, params: {}, options?: QueryOptions) {
+        return this.pgdb.query(queryString, params, options);
     }
 }
 
-export let dbConnect = new DbConnect();
+export let db = new Db();
 

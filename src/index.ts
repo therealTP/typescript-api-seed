@@ -4,13 +4,13 @@ dotenv.config();
 
 // Import modules
 import { Api } from './api/Api';
-import { dbConnect } from './database/DbConnect';
+import { db } from './database/db';
 
 // Create api
 const newsApi = new Api();
 
 // Connect to DB
-dbConnect.connect();
+db.connect();
 
 // Start api
 newsApi.start();

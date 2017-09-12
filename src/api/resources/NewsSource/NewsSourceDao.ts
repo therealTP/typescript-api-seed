@@ -1,5 +1,5 @@
 // Import db object for use w/ extra custom methods
-import { dbConnect } from './../../../database/DbConnect';
+import { db } from './../../../database/db';
 import { DaoConfigInterface } from './../../../database/DaoConfigInterface';
 
 import { Dao } from './../../../database/Dao';
@@ -12,18 +12,18 @@ import { DeleteNewsSourceRequest } from './DeleteNewsSourceRequest';
 
 export class NewsSourceDao extends Dao<NewsSource, ListNewsSourceRequest, CreateNewsSourceRequest, ReadNewsSourceRequest, UpdateNewsSourceDataInterface> {
     constructor() {
-        const config: DaoConfigInterface = {
-            tableName: "news_sources",
+        const daoConfig: DaoConfigInterface = {
+            tableName: 'news_sources',
             searchFields: ['name', 'website_url'],
             filterFields: ['non_profit', 'sells_ads', 'country'],
             sortFields: ['created', 'name'],
             defaultOffset: 0,
             defaultLimit: 15,
             defaultSort: ['name'],
-            findManyCustomQuery: `SELECT name, website FROM new`,
+            findManyCustomQuery: `SELECT * FROM news_sources`,
             findOneCustomQuery: `SELECT name, website_url, id FROM news_sources WHERE id=:id`
         }
-        super(config);
+        super(daoConfig);
     }
 
     getResourceInstance() {
