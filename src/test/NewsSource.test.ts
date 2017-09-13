@@ -27,6 +27,9 @@ describe('News Source Endpoints', () => {
         }   
     });
 
+    // vars to hold test ids:
+    let newId;
+
     describe('GET /source', () => {
         it('it should GET two news sources', () => {
             return chai.request(server)
@@ -52,27 +55,7 @@ describe('News Source Endpoints', () => {
         });
     });
 
-    describe('GET /source/:id', () => {
-        it('it should GET a news source by id', () => {
-            return chai.request(server)
-            .get('/source/cb9add7a-9018-4b32-bc44-b4509d932508')
-            .then(res => {
-                res.should.have.status(200);
-                expect(res.type).to.eql('application/json');
-                expect(res.body.response).to.be.a('object');
-                expect(res.body.response).to.have.all.keys([
-                    'name',
-                    'id',
-                    'websiteUrl'
-                ]);
-                expect(res.body.response.name).to.eql('CNN');
-            });
-        });
-    });
-
     describe('POST /source', () => {
-        let newId;
-
         it('it should POST a news source', () => {
             var newsSource = new NewsSource();
             newsSource.name = 'MSNBC';
@@ -106,8 +89,48 @@ describe('News Source Endpoints', () => {
                 expect(res.body.response.name).to.eql('MSNBC');
             });
         });
+    });
 
-        it('it should DELETE a news source', () => {
+    describe('GET /source/:id', () => {
+        it('it should GET a news source by id', () => {
+            return chai.request(server)
+            .get('/source/' + newId)
+            .then(res => {
+                res.should.have.status(200);
+                expect(res.type).to.eql('application/json');
+                expect(res.body.response).to.be.a('object');
+                expect(res.body.response).to.have.all.keys([
+                    'name',
+                    'id',
+                    'websiteUrl'
+                ]);
+                expect(res.body.response.name).to.eql('MSNBC');
+                expect(res.body.response.id).to.eql(newId);
+            });
+        });
+    });
+
+    describe('PUT /source/:id', () => {
+        it('it should UPDATE a news source', () => {
+            let updateBody = {
+                websiteUrl: "www.testupdate.com"
+            };
+
+            return chai.request(server)
+            .put('/source/' + newId)
+            .send(updateBody)
+            .then(res => {
+                res.should.have.status(200);
+                expect(res.type).to.eql('application/json');
+                expect(res.body.response).to.be.a('object');
+                expect(res.body.response.websiteUrl).to.eql(updateBody.websiteUrl);
+            });
+        });
+    });
+
+
+    describe('DELETE /source/:id', () => {
+        it('it should DELETE a news source by id when id exists', () => {
             return chai.request(server)
             .del('/source/' + newId)
             .then(res => {
@@ -117,6 +140,18 @@ describe('News Source Endpoints', () => {
                 expect(res.body.response).to.eql({});
             });
         });
-    });
 
+        it('it should throw an error when trying to delete an id that does not exist', () => {
+            return chai.request(server)
+            .del('/source/THISISNOTANID')
+            .then(res => {
+                // res.should.have.status(500);
+                expect(res.type).to.eql('application/json');
+                // expect(res.body.success).to.eql(false);
+            }, err => {
+                err.should.have.status(500);
+                // expect(err.type).to.eql('application/json');
+            });
+        });
+    });
 });
