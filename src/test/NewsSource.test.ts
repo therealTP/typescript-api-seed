@@ -1,3 +1,7 @@
+// Useful examples:
+// http://mherman.org/blog/2016/11/05/developing-a-restful-api-with-node-and-typescript/#.WbhxGtOGNsM
+// http://brianflove.com/2016/11/11/typescript-2-express-mongoose-mocha-chai/ 
+
 // Set ENV to 'TEST' to use a test DB
 process.env.ENV = 'TEST';
 
@@ -7,6 +11,7 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 import { server } from './../index';
 import { db } from './../database/db';
+import { NewsSource } from './../api/resources/NewsSource/NewsSource';
 
 let expect = chai.expect;
 let should = chai.should();
@@ -61,6 +66,55 @@ describe('News Source Endpoints', () => {
                     'websiteUrl'
                 ]);
                 expect(res.body.response.name).to.eql('CNN');
+            });
+        });
+    });
+
+    describe('POST /source', () => {
+        let newId;
+
+        it('it should POST a news source', () => {
+            var newsSource = new NewsSource();
+            newsSource.name = 'MSNBC';
+            newsSource.websiteUrl = 'www.msnbc.com';
+            newsSource.nonProfit = false;
+            newsSource.sellsAds = true;
+            newsSource.twitterUsername = 'msnbc';
+            newsSource.youtubeUsername = 'msnbc';
+
+            return chai.request(server)
+            .post('/source')
+            .send(newsSource)
+            .then(res => {
+                res.should.have.status(200);
+                expect(res.type).to.eql('application/json');
+                expect(res.body.response).to.be.a('object');
+                expect(res.body.response).to.have.all.keys([
+                    "country",
+                    "created",
+                    "id",
+                    "logoUrl",
+                    "name",
+                    "nonProfit",
+                    "sellsAds",
+                    "slug",
+                    "twitterUsername",
+                    "websiteUrl",
+                    "youtubeUsername"
+                ]);
+                newId = res.body.response.id;
+                expect(res.body.response.name).to.eql('MSNBC');
+            });
+        });
+
+        it('it should DELETE a news source', () => {
+            return chai.request(server)
+            .del('/source/' + newId)
+            .then(res => {
+                res.should.have.status(200);
+                expect(res.type).to.eql('application/json');
+                expect(res.body.response).to.be.a('object');
+                expect(res.body.response).to.eql({});
             });
         });
     });
