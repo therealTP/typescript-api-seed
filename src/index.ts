@@ -10,7 +10,10 @@ import { db } from './database/db';
 const newsApi = new Api();
 
 // Connect to DB
-db.connect();
+if (process.env.ENV !== 'TEST') db.connect();
 
 // Start api
 newsApi.start();
+
+// for testing:
+export let server = newsApi.app;

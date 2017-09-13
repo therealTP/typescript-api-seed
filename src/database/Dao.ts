@@ -154,7 +154,7 @@ export abstract class Dao<ResourceType, ListRequestType extends ListRequest, Cre
         let filterMap = this.generateFilterMap(filterFields);
         let findMap = this.generateFindMap(searchMap, filterMap);
         
-        let rows;
+        let rows;   
         // if a custom query exists in DAO config:
         if (this.findManyCustomQuery) {
             // run the custom query w/ find map as params:
@@ -174,16 +174,18 @@ export abstract class Dao<ResourceType, ListRequestType extends ListRequest, Cre
         } else {
             row = await db.getTable(this.tableName).findOne(readRequest);
         }
-        return this.createResourceInstanceFromRow(row);
+        return this.createResourceInstanceFromRow(row[0]);
     }
 
     public async create(createRequest: CreateRequestType): Promise<ResourceType> {
+        // Right now, request data must map to DB columns (camelCase to snake_case)
         let createData = decamelizeKeys(createRequest);
         let created = await db.getTable(this.tableName).insertAndGet(createData);
         return this.createResourceInstanceFromRow(created);
     }
 
     public async update(id: string, updates: UpdateRequestDataType): Promise<ResourceType> {
+        // Right now, request data must map to DB columns (camelCase to snake_case)
         let updateData = decamelizeKeys(updates);
         let updated = await db.getTable(this.tableName).updateAndGetOne({id}, updateData);
         return this.createResourceInstanceFromRow(updated);

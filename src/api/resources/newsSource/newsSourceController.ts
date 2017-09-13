@@ -28,7 +28,7 @@ export class NewsSourceController implements Controller {
         let searchTerm: string = req.query.q;
 
         // Filter params: not search term or query options
-        let filterParams = lo.omit(req.query, ['limit', 'offset', 'search', 'order_by']);
+        let filterParams = lo.omit(req.query, ['q', 'limit', 'offset', 'order_by']);
         
         this.dao.findMany(listRequest, searchTerm, filterParams)
         .then(data => {
@@ -60,7 +60,7 @@ export class NewsSourceController implements Controller {
 
         this.dao.create(createRequest)
         .then(data => {
-            const createResponse = new CreateNewsSourceResponse(data);
+            let createResponse = new CreateNewsSourceResponse(data);
             res.json(createResponse);
         })
         .catch(err => {

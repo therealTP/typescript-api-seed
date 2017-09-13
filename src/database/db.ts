@@ -7,26 +7,52 @@ let dbConfig = {
     user: process.env.DB_USER,
     password: process.env.DB_PW,
     max: 10,
-    idleTimeoutMillis: 10000, // close idle clients after 2s
+    idleTimeoutMillis: 10000, // close idle clients after 10s
+    poolSize: 10
+};
+
+let testDbConfig = {
+    host: process.env.TEST_DB_URL,
+    port: process.env.TEST_DB_PORT,
+    database: process.env.TEST_DB_NAME,
+    user: process.env.TEST_DB_USER,
+    password: process.env.TEST_DB_PW,
+    max: 10,
+    idleTimeoutMillis: 10000, // close idle clients after 10s
     poolSize: 10
 };
 
 class Db {
     pgdb: PgDb;
     connected: boolean;
+    connecting: boolean;
 
     constructor() {
         this.connected = false;
     }
 
     public async connect() {
-        try {
-            this.pgdb = await PgDb.connect(dbConfig);
-            this.connected = true;
-            console.log("DB Connected");
-        } catch(e) {
-            console.log("DB failed to connect. Err: ", e);
+        if (!this.connected && !this.connecting) {
+            this.connecting = true;
+            try {
+                let config;
+                if (process.env.ENV === 'TEST') {
+                    config = testDbConfig;
+                } else {
+                    config = dbConfig;
+                }
+                this.pgdb = await PgDb.connect(config);
+                this.connected = true;
+                console.log("DB Connected");
+            } catch(e) {
+                console.log("DB failed to connect. Err: ", e);
+            } finally {
+                this.connecting = false;
+            }
+        } else {
+            console.log("DB already connected");
         }
+
     }
 
     public getTable(tableName: string) {

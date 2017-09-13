@@ -20,7 +20,8 @@ export class App {
 
     // Configure Express middleware
     private middleware(): void {
-        this.app.use(logger('tiny'));
+        // if not testing, use logger:
+        if (process.env.ENV !== 'TEST') this.app.use(logger('tiny'));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: false }));
     }

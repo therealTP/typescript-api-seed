@@ -14,4 +14,6 @@ export interface DaoConfigInterface {
     // Optional queries to use in lieu of pogi methods:
     findManyCustomQuery?: string;
     findOneCustomQuery?: string;
+    // Maps request data to DB columns:
+    columnMap?: {}
 }
