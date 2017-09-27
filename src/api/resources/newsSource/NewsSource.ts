@@ -1,4 +1,4 @@
-import { AbstractResource } from './../../AbstractResource';
+import { AbstractResource } from './../AbstractResource';
 import { CountryAbbrevType } from '../../../enums/CountryAbbrevType';
 
 export class NewsSource extends AbstractResource {

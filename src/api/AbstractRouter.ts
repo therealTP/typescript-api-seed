@@ -11,11 +11,13 @@ export abstract class AbstractRouter<ControllerType extends Controller> {
         this.setRoutes();
     }
 
-    setRoutes(): void {
-        this.router.get('/', this.controller.list);
-        this.router.post('/', this.controller.create);
-        this.router.get('/:id', this.controller.read);
-        this.router.put('/:id', this.controller.update);
-        this.router.delete('/:id', this.controller.delete);
-    }
+    abstract setRoutes(): void;
+
+    // setRoutes(): void {
+    //     this.router.get('/', this.controller.list);
+    //     this.router.post('/', this.controller.create);
+    //     this.router.get('/:id', this.controller.read);
+    //     this.router.put('/:id', this.controller.update);
+    //     this.router.delete('/:id', this.controller.delete);
+    // }
 }

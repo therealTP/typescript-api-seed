@@ -1,0 +1,4 @@
+{
+    "err.request_invalid": "The request is invalid",
+    "err.database_error": "There has been a database error"
+}
