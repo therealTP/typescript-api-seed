@@ -1,6 +1,6 @@
 import { AbstractRouter } from '../../AbstractRouter';
 import { NewsSourceController } from './NewsSourceController';
-import { handleValidationError } from './../../errors/handleValidationError';
+import { handleValidationErrorMiddleware } from './../../errors/errorUtils';
 import { listValidator, readValidator, createValidator, updateValidator, deleteValidator } from './NewsSourceRequestValidators'
 
 export class NewsSourceRouter extends AbstractRouter<NewsSourceController> {
@@ -9,10 +9,10 @@ export class NewsSourceRouter extends AbstractRouter<NewsSourceController> {
     }
 
     setRoutes(): void {
-        this.router.get('/', listValidator, handleValidationError, this.controller.list);
-        this.router.post('/', createValidator, handleValidationError, this.controller.create);
-        this.router.get('/:id', readValidator, handleValidationError, this.controller.read);
-        this.router.put('/:id', updateValidator, handleValidationError, this.controller.update);
-        this.router.delete('/:id', deleteValidator, handleValidationError, this.controller.delete);
+        this.router.get('/', listValidator, handleValidationErrorMiddleware, this.controller.list);
+        this.router.post('/', createValidator, handleValidationErrorMiddleware, this.controller.create);
+        this.router.get('/:id', readValidator, handleValidationErrorMiddleware, this.controller.read);
+        this.router.put('/:id', updateValidator, handleValidationErrorMiddleware, this.controller.update);
+        this.router.delete('/:id', deleteValidator, handleValidationErrorMiddleware, this.controller.delete);
     }
 }

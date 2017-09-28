@@ -1,4 +1,5 @@
 import { PgDb, PgSchema, PgTable, QueryOptions } from 'pogi';
+import { handleDbConnectionError } from './../api/errors/errorUtils';
 
 let dbConfig = {
     host: process.env.DB_URL,
@@ -44,8 +45,8 @@ class Db {
                 this.pgdb = await PgDb.connect(config);
                 this.connected = true;
                 console.log("DB Connected");
-            } catch(e) {
-                console.log("DB failed to connect. Err: ", e);
+            } catch(err) {
+                handleDbConnectionError(err);
             } finally {
                 this.connecting = false;
             }

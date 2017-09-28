@@ -36,7 +36,7 @@ export class NewsSourceController implements Controller {
             res.json(listResponse);
         })
         .catch(err => {
-            handleDbErrorResponse(err, 'err.dao_list', res);
+            handleDbErrorResponse(err, res);
         });
     }
 
@@ -64,7 +64,7 @@ export class NewsSourceController implements Controller {
             res.json(createResponse);
         })
         .catch(err => {
-            handleDbErrorResponse(err, 'err.dao_create', res);
+            handleDbErrorResponse(err, res);
         });
     }
 
@@ -76,7 +76,7 @@ export class NewsSourceController implements Controller {
             res.json(response);
         })
         .catch(err => {
-            handleDbErrorResponse(err, 'err.dao_read', res);
+            handleDbErrorResponse(err, res);
         });
     }
 
@@ -88,7 +88,7 @@ export class NewsSourceController implements Controller {
             res.json(updateResponse);
         })
         .catch(err => {
-            handleDbErrorResponse(err, 'err.dao_update', res);
+            handleDbErrorResponse(err, res);
         });
     }
 
@@ -100,7 +100,7 @@ export class NewsSourceController implements Controller {
             res.json(deleteResponse);
         })
         .catch(err => {
-            handleDbErrorResponse(err, 'err.dao_delete', res);
+            handleDbErrorResponse(err, res);
         });
     }
 }

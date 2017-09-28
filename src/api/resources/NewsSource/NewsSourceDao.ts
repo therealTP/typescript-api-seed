@@ -21,7 +21,7 @@ export class NewsSourceDao extends Dao<NewsSource, ListNewsSourceRequest, Create
             defaultLimit: 15,
             defaultSort: ['name'],
             // findManyCustomQuery: `SELECT * FROM news_sources`,
-            findOneCustomQuery: `SELECT name, website_url, id FROM news_sources WHERE id=:id`,
+            findOneCustomQuery: `SELECT name, website_url, testfield, id FROM news_sources WHERE id=:id`,
             // TODO:
         }
         super(daoConfig);
