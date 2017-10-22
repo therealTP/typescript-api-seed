@@ -1,7 +1,7 @@
 import { PgDb, PgSchema, PgTable, QueryOptions } from 'pogi';
 import { handleDbConnectionError } from './../api/errors/errorUtils';
 
-let dbConfig = {
+const dbConfig = {
     host: process.env.DB_URL,
     port: process.env.DB_PORT,
     database: process.env.DB_NAME,
@@ -12,7 +12,7 @@ let dbConfig = {
     poolSize: 10
 };
 
-let testDbConfig = {
+const testDbConfig = {
     host: process.env.TEST_DB_URL,
     port: process.env.TEST_DB_PORT,
     database: process.env.TEST_DB_NAME,
